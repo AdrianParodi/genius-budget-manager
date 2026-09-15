@@ -44,13 +44,6 @@ public class CampaignController {
         return ResponseEntity.ok(campaignService.getCampaignById(id));
     }
 
-    //Obterner campana por nombre de cliente
-    @GetMapping("/client/{clientName}")
-    @Operation(summary = "Obtener campana por Nombre de cliente")
-    public ResponseEntity<List<Campaign>> getCampaignByClientName(@PathVariable String clientName) {
-        return ResponseEntity.ok(campaignService.getCampaignsByClient(clientName));
-    }
-
     @GetMapping("/{id}/summary")
     @Operation(summary = "Resumen de presupuesto", description = "Retorna el resumen de uso de presupuesto de la campana.")
     public ResponseEntity<BudgetSummary> getBudgetSummary(@PathVariable Long id) {
@@ -74,4 +67,19 @@ public class CampaignController {
     public ResponseEntity<Campaign> updateBudget(@PathVariable Long id, @RequestBody BudgetUpdateRequest request) {
         return ResponseEntity.ok(campaignService.updateBudget(id, request.getBudget()));
     }
+
+    //Obterner campana por nombre de cliente
+    @GetMapping("/client/{clientName}")
+    @Operation(summary = "Obtener campana por Nombre de cliente")
+    public ResponseEntity<List<Campaign>> getCampaignByClientName(@PathVariable String clientName) {
+        return ResponseEntity.ok(campaignService.getCampaignsByClient(clientName));
+    }
+
+    //Actualizar el estado de la campaña
+    /*
+    @PutMapping("/{id}/budget")
+    @Operation(summary = "Actualizar el estado de una campana")
+    public ResponseEntity<Campaign> updateBudget(@PathVariable Long id, @RequestBody BudgetUpdateRequest request) {
+        return ResponseEntity.ok(campaignService.updateBudget(id, request.getBudget()));
+    } */
 }

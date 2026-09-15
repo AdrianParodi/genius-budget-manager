@@ -54,6 +54,7 @@ public class CampaignRepository {
         return campaigns.stream().filter(c -> c.getId().equals(id)).findFirst();
     }
 
+    //Filtra campañas por nombre de cliente (case insensitive)
     public List<Campaign> findByClient(String clientName) {
     return campaigns.stream()
         .filter(c -> c.getClient().equalsIgnoreCase(clientName))
@@ -71,4 +72,13 @@ public class CampaignRepository {
         expenses.add(expense);
         return expense;
     }
+
+    //Actualiza el estado de la campaña
+    public Campaign updateCampaignStatus(Long campaignId, String newStatus) {
+        Campaign campaign = campaigns.stream().filter(c -> c.getId().equals(campaignId)).findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Campaign not found"));
+
+        campaign.setStatus(newStatus);
+        return campaign;
+     }
 }

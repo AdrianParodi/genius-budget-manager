@@ -32,9 +32,9 @@ public class CampaignService {
                 .orElseThrow(() -> new RuntimeException("Campaign not found: " + id));
     }
 
-public List<Campaign> getCampaignsByClient(String clientName) {
-    return repository.findByClient(clientName);
-}
+    public List<Campaign> getCampaignsByClient(String clientName) {
+        return repository.findByClient(clientName);
+    }
 
     public BudgetSummary getBudgetSummary(Long campaignId) {
         Campaign campaign = getCampaignById(campaignId);
@@ -90,6 +90,13 @@ public List<Campaign> getCampaignsByClient(String clientName) {
         Campaign campaign = getCampaignById(campaignId);
         campaign.setSpent(0.0);
         campaign.setBudget(newBudget);
+        return campaign;
+    }
+
+    //Actualiza el estado de la campaña
+    public Campaign updateCampaignStatus(Long campaignId, String status) {
+        Campaign campaign = getCampaignById(campaignId);
+        campaign.setStatus(status);;
         return campaign;
     }
 }
