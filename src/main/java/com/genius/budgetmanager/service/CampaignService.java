@@ -32,6 +32,10 @@ public class CampaignService {
                 .orElseThrow(() -> new RuntimeException("Campaign not found: " + id));
     }
 
+public List<Campaign> getCampaignsByClient(String clientName) {
+    return repository.findByClient(clientName);
+}
+
     public BudgetSummary getBudgetSummary(Long campaignId) {
         Campaign campaign = getCampaignById(campaignId);
 

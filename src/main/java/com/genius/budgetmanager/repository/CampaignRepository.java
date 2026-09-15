@@ -54,6 +54,12 @@ public class CampaignRepository {
         return campaigns.stream().filter(c -> c.getId().equals(id)).findFirst();
     }
 
+    public List<Campaign> findByClient(String clientName) {
+    return campaigns.stream()
+        .filter(c -> c.getClient().equalsIgnoreCase(clientName))
+        .collect(Collectors.toList());
+    }
+
     public List<Expense> findExpensesByCampaignId(Long campaignId) {
         return expenses.stream()
                 .filter(e -> e.getCampaignId().equals(campaignId))

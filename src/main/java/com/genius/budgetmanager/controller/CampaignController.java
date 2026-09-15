@@ -44,6 +44,13 @@ public class CampaignController {
         return ResponseEntity.ok(campaignService.getCampaignById(id));
     }
 
+    //Obterner campana por nombre de cliente
+    @GetMapping("/client/{clientName}")
+    @Operation(summary = "Obtener campana por Nombre de cliente")
+    public ResponseEntity<List<Campaign>> getCampaignByClientName(@PathVariable String clientName) {
+        return ResponseEntity.ok(campaignService.getCampaignsByClient(clientName));
+    }
+
     @GetMapping("/{id}/summary")
     @Operation(summary = "Resumen de presupuesto", description = "Retorna el resumen de uso de presupuesto de la campana.")
     public ResponseEntity<BudgetSummary> getBudgetSummary(@PathVariable Long id) {
