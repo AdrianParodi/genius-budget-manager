@@ -1,5 +1,6 @@
 package com.genius.budgetmanager.service;
 
+import com.genius.budgetmanager.model.enums.CampaignStatus;
 import com.genius.budgetmanager.model.BudgetSummary;
 import com.genius.budgetmanager.model.Campaign;
 import com.genius.budgetmanager.model.Expense;
@@ -94,9 +95,9 @@ public class CampaignService {
     }
 
     //Actualiza el estado de la campaña
-    public Campaign updateCampaignStatus(Long campaignId, String status) {
+    public Campaign updateCampaignStatus(Long campaignId, CampaignStatus status) {
         Campaign campaign = getCampaignById(campaignId);
-        campaign.setStatus(status);;
+        campaign.setStatus(status.name());
         return campaign;
     }
 }

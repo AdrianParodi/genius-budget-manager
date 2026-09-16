@@ -5,12 +5,14 @@ import com.genius.budgetmanager.model.BudgetUpdateRequest;
 import com.genius.budgetmanager.model.Campaign;
 import com.genius.budgetmanager.model.Expense;
 import com.genius.budgetmanager.model.GlobalBudgetSummary;
+import com.genius.budgetmanager.model.StatusUpdateRequest;
 import com.genius.budgetmanager.service.CampaignService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -76,10 +78,18 @@ public class CampaignController {
     }
 
     //Actualizar el estado de la campaña
-    /*
-    @PutMapping("/{id}/budget")
+    @PutMapping("/{id}/status")
     @Operation(summary = "Actualizar el estado de una campana")
-    public ResponseEntity<Campaign> updateBudget(@PathVariable Long id, @RequestBody BudgetUpdateRequest request) {
-        return ResponseEntity.ok(campaignService.updateBudget(id, request.getBudget()));
-    } */
+    public ResponseEntity<Campaign> updateStatus(
+        @PathVariable Long id,
+        @RequestBody StatusUpdateRequest request) {
+        return ResponseEntity.ok(campaignService.updateCampaignStatus(id, request.getStatus()));
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<String> handleInvalidEnum(HttpMessageNotReadableException ex) {
+    return ResponseEntity
+        .badRequest()
+        .body("Estado inválido. Los valores permitidos son: active, paused, closed, draft");
+    }
 }
