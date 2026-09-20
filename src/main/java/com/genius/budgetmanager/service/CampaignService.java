@@ -46,7 +46,7 @@ public class CampaignService {
         summary.setClient(campaign.getClient());
         summary.setTotalBudget(campaign.getBudget());
         summary.setSpent(campaign.getSpent());
-        summary.setRemaining(campaign.getBudget() - campaign.getBudget());
+        summary.setRemaining(campaign.getBudget() - campaign.getSpent());
         summary.setPercentageUsed(
                 Math.round((campaign.getSpent() / campaign.getBudget()) * 10000.0) / 100.0
         );
