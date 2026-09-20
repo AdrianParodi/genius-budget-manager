@@ -86,6 +86,14 @@ public class CampaignController {
         return ResponseEntity.ok(campaignService.updateCampaignStatus(id, request.getStatus()));
     }
 
+    //Listar campanas por estado
+    @GetMapping("/status/{status}")
+    @Operation(summary = "Obtener campana por status")
+    public ResponseEntity<List<Campaign>> getCampaignsByStatus(@PathVariable String status) {
+        return ResponseEntity.ok(campaignService.getCampaignsByStatus(status));
+    }
+
+
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<String> handleInvalidEnum(HttpMessageNotReadableException ex) {
     return ResponseEntity

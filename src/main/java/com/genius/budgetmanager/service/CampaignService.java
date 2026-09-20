@@ -24,7 +24,7 @@ public class CampaignService {
 
     public List<Campaign> getCampaignsByStatus(String status) {
         return repository.findAll().stream()
-                .filter(c -> c.getType().equalsIgnoreCase(status))
+                .filter(c -> c.getStatus().equalsIgnoreCase(status))
                 .collect(Collectors.toList());
     }
 
