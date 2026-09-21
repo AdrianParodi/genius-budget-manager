@@ -82,7 +82,7 @@ public class CampaignRepository {
         return campaign;
      }
 
-      //Trae las campañas por status: (`active`, `paused`, `closed`, `draft`) (case insensitive)
+    //Trae las campañas por status: (`active`, `paused`, `closed`, `draft`) (case insensitive)
     public List<Campaign> getCampaignsByStatus(String status) {
     return campaigns.stream()
         .filter(c -> c.getStatus().equalsIgnoreCase(status))
