@@ -81,4 +81,19 @@ public class CampaignRepository {
         campaign.setStatus(newStatus);
         return campaign;
      }
+
+    //Trae las campañas por status: (`active`, `paused`, `closed`, `draft`) (case insensitive)
+    public List<Campaign> getCampaignsByStatus(String status) {
+    return campaigns.stream()
+        .filter(c -> c.getStatus().equalsIgnoreCase(status))
+        .collect(Collectors.toList());
+    }
+
+    //Agrega una nueva campaña
+    public Campaign addCampaign(Campaign campaign) {
+        long newId = campaigns.stream().mapToLong(Campaign::getId).max().orElse(0) + 1;
+        campaign.setId(newId);
+        campaigns.add(campaign);
+        return campaign;
+    }
 }
