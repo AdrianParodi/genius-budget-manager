@@ -3,6 +3,7 @@ package com.genius.budgetmanager.controller;
 import com.genius.budgetmanager.model.BudgetSummary;
 import com.genius.budgetmanager.model.BudgetUpdateRequest;
 import com.genius.budgetmanager.model.Campaign;
+import com.genius.budgetmanager.model.CreateCampaignRequest;
 import com.genius.budgetmanager.model.Expense;
 import com.genius.budgetmanager.model.GlobalBudgetSummary;
 import com.genius.budgetmanager.model.StatusUpdateRequest;
@@ -58,6 +59,13 @@ public class CampaignController {
         return ResponseEntity.ok(campaignService.getExpensesByCampaign(id));
     }
 
+    //Agregar una nueva campana
+    @PostMapping
+    @Operation(summary = "Dar de alta una nueva campana")
+    public ResponseEntity<Campaign> addCampaign(@RequestBody CreateCampaignRequest request) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(campaignService.addCampaign(request));
+    }
+
     @PostMapping("/{id}/expenses")
     @Operation(summary = "Registrar un gasto en la campana")
     public ResponseEntity<Expense> addExpense(@PathVariable Long id, @RequestBody Expense expense) {
@@ -86,12 +94,13 @@ public class CampaignController {
         return ResponseEntity.ok(campaignService.updateCampaignStatus(id, request.getStatus()));
     }
 
-    //Obterner campana por status
+    //Listar campanas por estado
     @GetMapping("/status/{status}")
-    @Operation(summary = "Obtener campana por estado")
-    public ResponseEntity<List<Campaign>> getCampaignByStatus(@PathVariable String status) {
+    @Operation(summary = "Obtener campana por status")
+    public ResponseEntity<List<Campaign>> getCampaignsByStatus(@PathVariable String status) {
         return ResponseEntity.ok(campaignService.getCampaignsByStatus(status));
     }
+
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<String> handleInvalidEnum(HttpMessageNotReadableException ex) {
