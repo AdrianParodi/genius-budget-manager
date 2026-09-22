@@ -2,6 +2,7 @@ package com.genius.budgetmanager.service;
 
 import com.genius.budgetmanager.model.enums.CampaignStatus;
 import com.genius.budgetmanager.model.enums.Currency;
+import com.genius.budgetmanager.model.enums.ExpenseCategory;
 import com.genius.budgetmanager.model.BudgetSummary;
 import com.genius.budgetmanager.model.Campaign;
 import com.genius.budgetmanager.model.CreateCampaignRequest;
@@ -74,10 +75,45 @@ public class CampaignService {
     }
 
     public Expense addExpense(Long campaignId, Expense expense) {
+        validateExpense(campaignId, expense);
+
         Campaign campaign = getCampaignById(campaignId);
         expense.setCampaignId(campaignId);
         campaign.setSpent(campaign.getSpent() + expense.getAmount());
         return repository.saveExpense(expense);
+    }
+
+    private void validateExpense(Long campaignId, Expense expense) {
+        if (expense == null) {
+            throw new IllegalArgumentException("El gasto es obligatorio.");
+        }
+
+        getCampaignById(campaignId);
+
+        if (expense.getDescription() == null || expense.getDescription().isBlank()) {
+            throw new IllegalArgumentException("La descripción es obligatoria.");
+        }
+
+        if (expense.getAmount() == null || expense.getAmount() <= 0) {
+            throw new IllegalArgumentException("El monto debe ser mayor a 0.");
+        }
+
+        if (expense.getCategory() == null || expense.getCategory().isBlank()) {
+            throw new IllegalArgumentException("La categoría es obligatoria.");
+        }
+
+        if (!isValidExpenseCategory(expense.getCategory())) {
+            throw new IllegalArgumentException("La categoría no es válida. Los valores permitidos son: ads_spend, creative, tools, agency_fee.");
+        }
+
+        if (!isValidDate(expense.getDate())) {
+            throw new IllegalArgumentException("La fecha debe tener formato yyyy-MM-dd.");
+        }
+    }
+
+    private boolean isValidExpenseCategory(String category) {
+        return java.util.Arrays.stream(ExpenseCategory.values())
+                .anyMatch(validCategory -> validCategory.name().equalsIgnoreCase(category));
     }
 
     public GlobalBudgetSummary getGlobalBudgetSummary() {

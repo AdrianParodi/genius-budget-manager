@@ -1,7 +1,12 @@
 package com.genius.budgetmanager.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
+
 public class Expense {
 
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
     private Long id;
     private Long campaignId;
     private String description;

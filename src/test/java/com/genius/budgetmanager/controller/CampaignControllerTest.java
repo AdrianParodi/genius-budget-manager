@@ -306,6 +306,78 @@ class CampaignControllerTest {
     }
 
     @Test
+    void addExpense_emptyDescription_returnsBadRequest() throws Exception {
+        String body = """
+                {
+                  "description": "",
+                  "amount": 18000.0,
+                  "category": "ads_spend",
+                  "date": "2026-04-10"
+                }
+                """;
+
+        mockMvc.perform(post("/api/campaigns/2/expenses")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(body))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.error").value("La descripción es obligatoria."));
+    }
+
+    @Test
+    void addExpense_invalidAmount_returnsBadRequest() throws Exception {
+        String body = """
+                {
+                  "description": "Gasto inválido",
+                  "amount": 0.0,
+                  "category": "ads_spend",
+                  "date": "2026-04-10"
+                }
+                """;
+
+        mockMvc.perform(post("/api/campaigns/2/expenses")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(body))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.error").value("El monto debe ser mayor a 0."));
+    }
+
+    @Test
+    void addExpense_invalidCategory_returnsBadRequest() throws Exception {
+        String body = """
+                {
+                  "description": "Categoría invalida",
+                  "amount": 1500.0,
+                  "category": "marketing",
+                  "date": "2026-04-10"
+                }
+                """;
+
+        mockMvc.perform(post("/api/campaigns/2/expenses")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(body))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.error").value("La categoría no es válida. Los valores permitidos son: ads_spend, creative, tools, agency_fee."));
+    }
+
+    @Test
+    void addExpense_invalidDateFormat_returnsBadRequest() throws Exception {
+        String body = """
+                {
+                  "description": "Fecha inválida",
+                  "amount": 1200.0,
+                  "category": "creative",
+                  "date": "2026/04/10"
+                }
+                """;
+
+        mockMvc.perform(post("/api/campaigns/2/expenses")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(body))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.error").value("La fecha debe tener formato yyyy-MM-dd."));
+    }
+
+    @Test
     void addExpense_nonExistingCampaign_returns404() throws Exception {
         String body = """
                 {
