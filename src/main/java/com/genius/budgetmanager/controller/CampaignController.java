@@ -72,7 +72,7 @@ public class CampaignController {
 
     //Obterner campana por nombre de cliente
     @GetMapping("/client/{clientName}")
-    @Operation(summary = "Obtener campana por Nombre de cliente")
+    @Operation(summary = "Obtener campana por nombre de cliente")
     public ResponseEntity<List<Campaign>> getCampaignByClientName(@PathVariable String clientName) {
         return ResponseEntity.ok(campaignService.getCampaignsByClient(clientName));
     }
@@ -84,6 +84,13 @@ public class CampaignController {
         @PathVariable Long id,
         @RequestBody StatusUpdateRequest request) {
         return ResponseEntity.ok(campaignService.updateCampaignStatus(id, request.getStatus()));
+    }
+
+    //Obterner campana por status
+    @GetMapping("/status/{status}")
+    @Operation(summary = "Obtener campana por estado")
+    public ResponseEntity<List<Campaign>> getCampaignByStatus(@PathVariable String status) {
+        return ResponseEntity.ok(campaignService.getCampaignsByStatus(status));
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
