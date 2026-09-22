@@ -3,6 +3,7 @@ package com.genius.budgetmanager.controller;
 import com.genius.budgetmanager.model.BudgetSummary;
 import com.genius.budgetmanager.model.BudgetUpdateRequest;
 import com.genius.budgetmanager.model.Campaign;
+import com.genius.budgetmanager.model.CreateCampaignRequest;
 import com.genius.budgetmanager.model.Expense;
 import com.genius.budgetmanager.model.GlobalBudgetSummary;
 import com.genius.budgetmanager.model.StatusUpdateRequest;
@@ -56,6 +57,13 @@ public class CampaignController {
     @Operation(summary = "Listar gastos de una campana")
     public ResponseEntity<List<Expense>> getExpenses(@PathVariable Long id) {
         return ResponseEntity.ok(campaignService.getExpensesByCampaign(id));
+    }
+
+    //Agregar una nueva campana
+    @PostMapping
+    @Operation(summary = "Dar de alta una nueva campana")
+    public ResponseEntity<Campaign> addCampaign(@RequestBody CreateCampaignRequest request) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(campaignService.addCampaign(request));
     }
 
     @PostMapping("/{id}/expenses")

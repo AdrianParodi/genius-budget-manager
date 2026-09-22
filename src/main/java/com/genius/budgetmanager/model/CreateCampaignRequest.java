@@ -1,13 +1,7 @@
 package com.genius.budgetmanager.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import io.swagger.v3.oas.annotations.media.Schema;
+public class CreateCampaignRequest {
 
-public class Campaign {
-
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
-    private Long id;
     private String name;
     private String client;
     private String type;
@@ -17,25 +11,6 @@ public class Campaign {
     private String currency;
     private String startDate;
     private String endDate;
-
-    public Campaign() {}
-
-    public Campaign(Long id, String name, String client, String type, String status,
-                    Double budget, Double spent, String currency, String startDate, String endDate) {
-        this.id = id;
-        this.name = name;
-        this.client = client;
-        this.type = type;
-        this.status = status;
-        this.budget = budget;
-        this.spent = spent;
-        this.currency = currency;
-        this.startDate = startDate;
-        this.endDate = endDate;
-    }
-
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
 
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }

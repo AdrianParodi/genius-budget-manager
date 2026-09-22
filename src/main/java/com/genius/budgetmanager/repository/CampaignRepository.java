@@ -88,4 +88,12 @@ public class CampaignRepository {
         .filter(c -> c.getStatus().equalsIgnoreCase(status))
         .collect(Collectors.toList());
     }
+
+    //Agrega una nueva campaña
+    public Campaign addCampaign(Campaign campaign) {
+        long newId = campaigns.stream().mapToLong(Campaign::getId).max().orElse(0) + 1;
+        campaign.setId(newId);
+        campaigns.add(campaign);
+        return campaign;
+    }
 }
