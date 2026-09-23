@@ -44,6 +44,43 @@ def get_leads_summary() -> list:
 def export_to_excel(campaigns: list, summary: dict) -> None:
     """Genera el archivo Excel con métricas de campañas."""
     import openpyxl
+    from openpyxl.styles import Alignment, Border, Font, PatternFill, Side
+
+    header_fill = PatternFill('solid', fgColor='17365D')
+    header_font = Font(name='Aptos Display', size=11, bold=True, color='FFFFFF')
+    body_font = Font(name='Aptos', size=10, color='1F1F1F')
+    border = Border(
+        left=Side(style='thin', color='D9E2F3'),
+        right=Side(style='thin', color='D9E2F3'),
+        top=Side(style='thin', color='D9E2F3'),
+        bottom=Side(style='thin', color='D9E2F3'),
+    )
+    number_format = '#,##0.00'
+
+    def style_sheet(ws, widths: dict, numeric_columns: list[int]) -> None:
+        for cell in ws[1]:
+            cell.fill = header_fill
+            cell.font = header_font
+            cell.alignment = Alignment(horizontal='center', vertical='center')
+
+        for row in ws.iter_rows(min_row=2):
+            for cell in row:
+                cell.font = body_font
+                cell.border = border
+                cell.alignment = Alignment(vertical='center')
+            for column_index in numeric_columns:
+                row[column_index - 1].number_format = number_format
+
+        for column, width in widths.items():
+            ws.column_dimensions[column].width = width
+        for row in ws.iter_rows():
+            for cell in row:
+                cell.border = border
+
+        ws.freeze_panes = 'A2'
+        ws.auto_filter.ref = ws.dimensions
+        ws.row_dimensions[1].height = 24
+
     wb = openpyxl.Workbook()
 
     # Hoja de campañas
@@ -69,6 +106,14 @@ def export_to_excel(campaigns: list, summary: dict) -> None:
     ws2.append(['Total gastado',       summary.get('totalSpent', 0)])
     ws2.append(['Total disponible',    summary.get('totalAvailable', 0)])
     ws2.append(['% de consumo',        summary.get('consumptionPercentage', 0)])
+
+    style_sheet(
+        ws,
+        {'A': 10, 'B': 28, 'C': 22, 'D': 14, 'E': 16, 'F': 16, 'G': 16},
+        [5, 6, 7],
+    )
+    style_sheet(ws2, {'A': 24, 'B': 18}, [2])
+    ws2['B6'].number_format = '0.00"%"'
 
     wb.save(OUTPUT_FILE)
     print(f'Reporte guardado en {OUTPUT_FILE}')
