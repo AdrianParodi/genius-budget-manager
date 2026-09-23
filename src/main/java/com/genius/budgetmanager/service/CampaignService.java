@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -179,7 +180,8 @@ public class CampaignService {
         }
 
         boolean clientExists = repository.findAll().stream()
-                .anyMatch(existingCampaign -> existingCampaign.getClient().equalsIgnoreCase(request.getClient().trim()));
+                .anyMatch(existingCampaign -> existingCampaign.getClient()
+                .equalsIgnoreCase(request.getClient().trim()));
         if (!clientExists) {
             throw new IllegalArgumentException("El cliente no existe.");
         }
@@ -202,10 +204,14 @@ public class CampaignService {
         }
 
         if (!isValidCurrency(request.getCurrency())) {
-            throw new IllegalArgumentException("La moneda no es válida. Los valores permitidos son: ars, usd.");
+            String allowedValues = Arrays.stream(Currency.values())
+                .map(Enum::name) // convierte cada enum a String
+                .map(String::toLowerCase) // opcional: en minúsculas
+                .collect(Collectors.joining(", "));
+            throw new IllegalArgumentException("La moneda no es válida. Los valores permitidos son: " + allowedValues);
         }
 
-        if (!isValidDate(request.getStartDate()) || !isValidDate(request.getEndDate())) {
+        if (!isValidDate(request.getStartDate()) || !isValidDate(request.getEndDate())) {      
             throw new IllegalArgumentException("Las fechas deben tener formato yyyy-MM-dd.");
         }
 
