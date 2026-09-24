@@ -175,6 +175,10 @@ public class CampaignService {
             throw new IllegalArgumentException("La campaña es obligatoria.");
         }
 
+        if (request.getName() == null || request.getName().isBlank()) {
+            throw new IllegalArgumentException("El nombre es obligatorio.");
+        }
+
         if (request.getClient() == null || request.getClient().isBlank()) {
             throw new IllegalArgumentException("El cliente es obligatorio.");
         }
