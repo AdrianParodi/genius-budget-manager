@@ -138,11 +138,18 @@ public class CampaignService {
         return summary;
     }
 
+    //Actualizar el presupuesto de la campaña
     public Campaign updateBudget(Long campaignId, Double newBudget) {
         Campaign campaign = getCampaignById(campaignId);
         campaign.setSpent(0.0);
         campaign.setBudget(newBudget);
         return campaign;
+    }
+
+    private void validateBudgetUpdate(Double newBudget) {
+        if (newBudget == null || newBudget < 1) {
+            throw new IllegalArgumentException("El presupuesto debe ser mayor o igual a 1.");
+        }
     }
 
     //Actualiza el estado de la campaña
