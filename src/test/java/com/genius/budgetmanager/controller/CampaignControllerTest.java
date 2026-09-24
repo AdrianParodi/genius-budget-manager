@@ -147,6 +147,29 @@ class CampaignControllerTest {
     }
 
     @Test
+    void addCampaign_blankName_returnsBadRequest() throws Exception {
+        String body = """
+                {
+                  "name": "   ",
+                  "client": "SuenoSimple",
+                  "type": "search_ads",
+                  "status": "draft",
+                  "budget": 50000.0,
+                  "spent": 0.0,
+                  "currency": "ARS",
+                  "startDate": "2026-07-01",
+                  "endDate": "2026-08-31"
+                }
+                """;
+
+        mockMvc.perform(post("/api/campaigns")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(body))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.error").value("El nombre es obligatorio."));
+    }
+
+    @Test
     void addCampaign_invalidStatus_returnsBadRequest() throws Exception {
         String body = """
                 {
@@ -402,6 +425,15 @@ class CampaignControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(6))
                 .andExpect(jsonPath("$.budget").value(75000.0));
+    }
+
+    @Test
+    void updateBudget_negativeAmount_returnsBadRequest() throws Exception {
+        mockMvc.perform(put("/api/campaigns/6/budget")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"budget\": -1000.0}"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.error").value("El presupuesto debe ser mayor o igual a 1."));
     }
 
     @Test

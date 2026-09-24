@@ -140,6 +140,8 @@ public class CampaignService {
 
     //Actualizar el presupuesto de la campaña
     public Campaign updateBudget(Long campaignId, Double newBudget) {
+        validateBudgetUpdate(newBudget);
+
         Campaign campaign = getCampaignById(campaignId);
         campaign.setSpent(0.0);
         campaign.setBudget(newBudget);
