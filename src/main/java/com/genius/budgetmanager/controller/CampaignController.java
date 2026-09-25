@@ -15,11 +15,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.annotation.CrossOrigin;
+
 import java.util.List;
 
-
-@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/api/campaigns")
 @Tag(name = "Campaigns", description = "Gestion de campanas y presupuestos")

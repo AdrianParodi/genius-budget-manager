@@ -26,6 +26,17 @@ class CampaignControllerTest {
     }
 
         @Test
+        void corsPreflight_allowsConfiguredFrontendOrigin() throws Exception {
+                mockMvc.perform(options("/api/campaigns")
+                                                .header("Origin", "http://localhost:5173")
+                                                .header("Access-Control-Request-Method", "POST"))
+                                .andExpect(status().isOk())
+                                .andExpect(header().string("Access-Control-Allow-Origin", "http://localhost:5173"))
+                                .andExpect(header().string("Access-Control-Allow-Methods",
+                                                org.hamcrest.Matchers.containsString("POST")));
+        }
+
+        @Test
         void getCampaignsByStatus_isCaseInsensitive() throws Exception {
                 mockMvc.perform(get("/api/campaigns").param("status", "ACTIVE"))
                                 .andExpect(status().isOk())
